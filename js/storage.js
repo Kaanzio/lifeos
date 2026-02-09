@@ -10,7 +10,13 @@ const Storage = {
         TASKS: 'lifeos_tasks',
         NOTIFICATIONS: 'lifeos_notifications',
         SETTINGS: 'lifeos_settings',
-        STATS: 'lifeos_stats'
+        STATS: 'lifeos_stats',
+        EXAMS: 'lifeos_exams',
+        BOOKS: 'lifeos_books',
+        GAMES: 'lifeos_games',
+        HABITS: 'lifeos_habits',
+        NOTES: 'lifeos_notes',
+        SCHEDULE: 'lifeos_schedule'
     },
 
     // Current User Prefix
@@ -80,7 +86,7 @@ const Storage = {
             });
 
             // Ayrıca hardcoded keyleri de temizle (varsa)
-            const specificKeys = ['lifeos_pomodoro', 'lifeos_schedule', 'lifeos_shows', 'lifeos_notes', 'lifeos_profile'];
+            const specificKeys = ['lifeos_pomodoro', 'lifeos_shows', 'lifeos_profile', 'lifeos_sites', 'lifeos_youtube'];
             specificKeys.forEach(key => {
                 const storageKey = this.userPrefix + key;
                 localStorage.removeItem(storageKey);

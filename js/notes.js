@@ -132,13 +132,14 @@ const Notes = {
         modalBody.innerHTML = `
             <form id="noteForm">
                 <div class="form-group">
-                    <label class="form-label">Başlık *</label>
-                    <input type="text" class="form-input" name="title" required
-                           placeholder="Not başlığı..." value="${isEdit ? editNote.title : ''}">
+                    <label class="form-label">📝 Başlık</label>
+                    <input type="text" class="form-input" name="title" 
+                           placeholder="Notunuzun başlığı (opsiyonel)"
+                           value="${isEdit ? editNote.title : ''}">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Kategori</label>
+                    <label class="form-label">📁 Kategori</label>
                     <select class="form-select" name="category">
                         ${this.categories.map(c => `
                             <option value="${c.id}" ${isEdit && editNote.category === c.id ? 'selected' : ''}>
@@ -149,7 +150,7 @@ const Notes = {
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">İçerik</label>
+                    <label class="form-label">✏️ Not İçeriği</label>
                     <textarea class="form-textarea" name="content" rows="10"
                               placeholder="Notunuzu buraya yazın...">${isEdit ? editNote.content : ''}</textarea>
                 </div>
@@ -166,11 +167,16 @@ const Notes = {
         document.getElementById('noteForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
+            const content = formData.get('content') || '';
+            const titleInput = formData.get('title')?.trim();
+            // Use provided title, or auto-generate from first line of content
+            const firstLine = content.split('\n')[0].trim();
+            const title = titleInput || firstLine.substring(0, 50) || 'Adsız Not';
 
             const data = {
-                title: formData.get('title'),
+                title: title,
                 category: formData.get('category'),
-                content: formData.get('content')
+                content: content
             };
 
             if (isEdit) {
@@ -293,16 +299,30 @@ const Notes = {
     },
 
     /**
-     * Not içeriği render - inline düzenlenebilir
+     * Not içeriği render - gelişmiş düzenleyici
      */
     renderNoteContent(note) {
         const cat = this.categories.find(c => c.id === note.category) || this.categories[0];
+        const wordCount = note.content ? note.content.trim().split(/\s+/).filter(w => w.length > 0).length : 0;
+        const charCount = note.content ? note.content.length : 0;
+        const lineCount = note.content ? note.content.split('\n').length : 0;
+
+        // Color options for note background
+        const colors = [
+            { id: 'default', name: 'Varsayılan', bg: 'transparent' },
+            { id: 'yellow', name: 'Sarı', bg: 'rgba(250, 204, 21, 0.1)' },
+            { id: 'green', name: 'Yeşil', bg: 'rgba(34, 197, 94, 0.1)' },
+            { id: 'blue', name: 'Mavi', bg: 'rgba(59, 130, 246, 0.1)' },
+            { id: 'purple', name: 'Mor', bg: 'rgba(139, 92, 246, 0.1)' },
+            { id: 'pink', name: 'Pembe', bg: 'rgba(236, 72, 153, 0.1)' }
+        ];
+        const currentColor = colors.find(c => c.id === note.color) || colors[0];
 
         return `
-            <div class="note-view">
+            <div class="note-view" style="background: ${currentColor.bg};">
                 <div class="note-view-header">
                     <div style="flex: 1;">
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
                             <select class="form-select" style="width: auto; padding: 4px 24px 4px 8px; font-size: 12px;"
                                     onchange="Notes.update('${note.id}', {category: this.value})">
                                 ${this.categories.map(c => `
@@ -311,8 +331,16 @@ const Notes = {
                                     </option>
                                 `).join('')}
                             </select>
-                            <span style="color: var(--text-muted); font-size: 12px;">
-                                ${this.formatDate(note.updatedAt)}
+                            <select class="form-select" style="width: auto; padding: 4px 24px 4px 8px; font-size: 12px;"
+                                    onchange="Notes.update('${note.id}', {color: this.value}); Notes.viewNote('${note.id}');">
+                                ${colors.map(c => `
+                                    <option value="${c.id}" ${note.color === c.id ? 'selected' : ''}>
+                                        ${c.name}
+                                    </option>
+                                `).join('')}
+                            </select>
+                            <span style="color: var(--text-muted); font-size: 11px;">
+                                📅 ${this.formatDate(note.updatedAt)}
                             </span>
                         </div>
                         <input type="text" class="note-title-input" value="${note.title}" 
@@ -324,18 +352,135 @@ const Notes = {
                         <button class="btn btn-secondary" onclick="Notes.togglePin('${note.id}')" title="${note.pinned ? 'Sabitlemeyi Kaldır' : 'Sabitle'}">
                             ${note.pinned ? '📌' : '📍'}
                         </button>
+                        <button class="btn btn-secondary" onclick="Notes.duplicateNote('${note.id}')" title="Kopyala">
+                            📋
+                        </button>
                         <button class="btn btn-secondary" onclick="if(confirm('Bu notu silmek istiyor musunuz?')) Notes.remove('${note.id}')" title="Sil">
                             🗑️
                         </button>
                     </div>
                 </div>
+
+                <!-- Formatting Toolbar -->
+                <div class="note-toolbar">
+                    <button class="note-tool-btn" onclick="Notes.insertFormat('**', '**')" title="Kalın">
+                        <strong>B</strong>
+                    </button>
+                    <button class="note-tool-btn" onclick="Notes.insertFormat('*', '*')" title="İtalik">
+                        <em>I</em>
+                    </button>
+                    <button class="note-tool-btn" onclick="Notes.insertFormat('~~', '~~')" title="Üstü Çizili">
+                        <s>S</s>
+                    </button>
+                    <span class="note-tool-divider"></span>
+                    <button class="note-tool-btn" onclick="Notes.insertFormat('# ', '')" title="Başlık">
+                        H1
+                    </button>
+                    <button class="note-tool-btn" onclick="Notes.insertFormat('## ', '')" title="Alt Başlık">
+                        H2
+                    </button>
+                    <span class="note-tool-divider"></span>
+                    <button class="note-tool-btn" onclick="Notes.insertFormat('- [ ] ', '')" title="Yapılacak (Checkbox)">
+                        ☐
+                    </button>
+                    <button class="note-tool-btn" onclick="Notes.insertFormat('- ', '')" title="Liste">
+                        •
+                    </button>
+                    <button class="note-tool-btn" onclick="Notes.insertFormat('1. ', '')" title="Numaralı Liste">
+                        1.
+                    </button>
+                    <span class="note-tool-divider"></span>
+                    <button class="note-tool-btn" onclick="Notes.insertFormat('> ', '')" title="Alıntı">
+                        ❝
+                    </button>
+                    <button class="note-tool-btn" onclick="Notes.insertFormat('\x60', '\x60')" title="Kod">
+                        &lt;/&gt;
+                    </button>
+                </div>
+
                 <div class="note-view-content">
-                    <textarea class="note-content-editor" 
-                              placeholder="Notunuzu buraya yazın..."
-                              onchange="Notes.update('${note.id}', {content: this.value})">${note.content}</textarea>
+                    <textarea class="note-content-editor" id="noteEditor"
+                              placeholder="Notunuzu buraya yazın...
+
+💡 İpuçları:
+• **kalın** yazı için yıldız kullan
+• *italik* yazı için tek yıldız
+• - [ ] ile yapılacaklar listesi
+• # ile başlık ekle"
+                              oninput="Notes.handleEditorInput('${note.id}', this.value)">${note.content}</textarea>
+                </div>
+
+                <!-- Statistics Bar -->
+                <div class="note-stats-bar">
+                    <span>📝 ${wordCount} kelime</span>
+                    <span>📊 ${charCount} karakter</span>
+                    <span>📄 ${lineCount} satır</span>
+                    <span style="margin-left: auto; font-size: 10px; color: var(--text-muted);">
+                        Oluşturma: ${new Date(note.createdAt).toLocaleDateString('tr-TR')}
+                    </span>
                 </div>
             </div>
         `;
+    },
+
+    /**
+     * Not kopyala
+     */
+    duplicateNote(id) {
+        const note = this.notes.find(n => n.id === id);
+        if (note) {
+            this.add({
+                title: note.title + ' (Kopya)',
+                content: note.content,
+                category: note.category,
+                color: note.color
+            });
+        }
+    },
+
+    /**
+     * Editör input handler (debounced save)
+     */
+    handleEditorInput(id, value) {
+        // Clear existing timeout
+        if (this.saveTimeout) {
+            clearTimeout(this.saveTimeout);
+        }
+        // Auto-save after 500ms of no typing
+        this.saveTimeout = setTimeout(() => {
+            const note = this.notes.find(n => n.id === id);
+            if (note) {
+                note.content = value;
+                note.updatedAt = new Date().toISOString();
+                this.saveNotes();
+            }
+        }, 500);
+    },
+
+    /**
+     * Format ekle (toolbar için)
+     */
+    insertFormat(before, after) {
+        const editor = document.getElementById('noteEditor');
+        if (!editor) return;
+
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        const text = editor.value;
+        const selected = text.substring(start, end);
+
+        const newText = text.substring(0, start) + before + selected + after + text.substring(end);
+        editor.value = newText;
+
+        // Update cursor position
+        const newPos = start + before.length + selected.length + after.length;
+        editor.setSelectionRange(newPos, newPos);
+        editor.focus();
+
+        // Trigger save
+        if (this.currentNote) {
+            this.handleEditorInput(this.currentNote.id, newText);
+        }
     }
 };
 

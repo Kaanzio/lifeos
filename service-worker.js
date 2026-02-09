@@ -21,7 +21,8 @@ const ASSETS_TO_CACHE = [
     './js/shows.js',
     './js/sites.js',
     './js/storage.js',
-    './js/youtube.js'
+    './js/youtube.js',
+    './js/drive-sync.js'
 ];
 
 // Install Event

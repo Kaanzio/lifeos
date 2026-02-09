@@ -12,7 +12,7 @@
     <meta name="theme-color" content="#0a0a0f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="assets/icon.svg">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +39,7 @@
                 <!-- Ana Menü -->
                 <a href="#" class="nav-item active" data-page="dashboard">
                     <span class="nav-icon">📊</span>
-                    <span class="nav-text">Dashboard</span>
+                    <span class="nav-text">Kontrol Merkezi</span>
                 </a>
 
                 <div class="nav-section">
@@ -120,13 +120,16 @@
             </div>
         </aside>
 
+        <!-- Mobile Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
         <!-- Main Content -->
         <main class="main-content">
             <!-- Header -->
             <header class="header">
                 <div class="header-left">
                     <button class="menu-toggle" id="menuToggle">☰</button>
-                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                    <h1 class="page-title" id="pageTitle">Kontrol Merkezi</h1>
                 </div>
                 <div class="header-right">
                     <button class="header-btn notification-btn" id="notificationBtn" title="Bildirimler">
@@ -191,6 +194,19 @@
                             </div>
                         </div>
 
+                        <!-- Quick Sites -->
+                        <div class="dashboard-quick-sites">
+                            <div class="panel-header">
+                                <h3>🔗 Sık Kullanılanlar</h3>
+                                <div class="quick-sites-actions">
+                                    <button class="quick-sites-add-btn" onclick="Dashboard.showQuickSiteModal(-1)"
+                                        title="Site Ekle">➕</button>
+                                </div>
+                            </div>
+                            <div class="quick-sites-grid" id="quickSitesGrid">
+                                <!-- JS will populate this -->
+                            </div>
+                        </div>
                         <!-- Today's Tasks -->
                         <div class="dashboard-panel tasks-panel">
                             <div class="panel-header">
@@ -208,13 +224,13 @@
                                 <h3>⚡ Hızlı Erişim</h3>
                             </div>
                             <div class="quick-actions-grid">
-                                <button class="quick-btn" data-action="addLesson">
-                                    <span class="quick-btn-icon">🎓</span>
-                                    <span>Yeni Ders</span>
+                                <button class="quick-btn" data-action="addSeries">
+                                    <span class="quick-btn-icon">📺</span>
+                                    <span>Yeni Dizi</span>
                                 </button>
-                                <button class="quick-btn" data-action="addBook">
-                                    <span class="quick-btn-icon">📖</span>
-                                    <span>Yeni Kitap</span>
+                                <button class="quick-btn" data-action="addMovie">
+                                    <span class="quick-btn-icon">🎬</span>
+                                    <span>Yeni Film</span>
                                 </button>
                                 <button class="quick-btn" data-action="addTask">
                                     <span class="quick-btn-icon">📋</span>
@@ -223,6 +239,14 @@
                                 <button class="quick-btn" data-action="addGame">
                                     <span class="quick-btn-icon">🎮</span>
                                     <span>Yeni Oyun</span>
+                                </button>
+                                <button class="quick-btn" data-action="addSite">
+                                    <span class="quick-btn-icon">🌐</span>
+                                    <span>Yeni Site</span>
+                                </button>
+                                <button class="quick-btn" data-action="addChannel">
+                                    <span class="quick-btn-icon">▶️</span>
+                                    <span>Yeni Kanal</span>
                                 </button>
                             </div>
                         </div>
@@ -626,118 +650,145 @@
                         <h2>👤 Profil</h2>
                     </div>
 
-                    <div class="profile-container">
-                        <div class="profile-card">
-                            <div class="profile-avatar-large" id="profileAvatarLarge">
-                                <span id="profileInitialLarge">?</span>
+                    <div class="profile-container profile-grid-layout">
+                        <!-- LEFT COLUMN: Identity & Info -->
+                        <div class="profile-col-left">
+                            <!-- Identity Card -->
+                            <div class="profile-card">
+                                <div class="profile-avatar-large" id="profileAvatarLarge">
+                                    <span id="profileInitialLarge">?</span>
+                                </div>
+                                <h3 class="profile-name" id="profileName">Kullanıcı</h3>
+                                <!-- Department subtitle REMOVED as requested -->
                             </div>
-                            <h3 class="profile-name" id="profileName">Kullanıcı</h3>
-                            <p class="profile-subtitle">Metalurji ve Malzeme Mühendisliği Öğrencisi</p>
+
+                            <!-- Personal Info -->
+                            <div class="profile-section">
+                                <h4>Kişisel Bilgiler</h4>
+                                <div class="profile-form">
+                                    <div class="form-group">
+                                        <label class="form-label">İsim</label>
+                                        <input type="text" class="form-input" id="profileNameInput"
+                                            placeholder="Adınız">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Üniversite</label>
+                                        <input type="text" class="form-input" id="profileUniversity"
+                                            placeholder="Üniversiteniz">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Bölüm</label>
+                                        <input type="text" class="form-input" id="profileDepartment"
+                                            placeholder="Seçiniz">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Sınıf</label>
+                                        <select class="form-select" id="profileYear">
+                                            <option value="" disabled selected>Seçiniz</option>
+                                            <option value="1">1. Sınıf</option>
+                                            <option value="2">2. Sınıf</option>
+                                            <option value="3">3. Sınıf</option>
+                                            <option value="4">4. Sınıf</option>
+                                            <option value="master">Yüksek Lisans</option>
+                                            <option value="phd">Doktora</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="profile-section">
-                            <h4>Kişisel Bilgiler</h4>
-                            <div class="profile-form">
-                                <div class="form-group">
-                                    <label class="form-label">İsim</label>
-                                    <input type="text" class="form-input" id="profileNameInput" placeholder="Adınız">
+                        <!-- RIGHT COLUMN: Stats & Settings -->
+                        <div class="profile-col-right">
+                            <!-- Stats -->
+                            <div class="profile-section">
+                                <h4>İstatistikler</h4>
+                                <div class="profile-stats">
+                                    <div class="profile-stat">
+                                        <span class="profile-stat-value" id="profileStatLessons">0</span>
+                                        <span class="profile-stat-label">Ders</span>
+                                    </div>
+                                    <div class="profile-stat">
+                                        <span class="profile-stat-value" id="profileStatBooks">0</span>
+                                        <span class="profile-stat-label">Kitap</span>
+                                    </div>
+                                    <div class="profile-stat">
+                                        <span class="profile-stat-value" id="profileStatTasks">0</span>
+                                        <span class="profile-stat-label">Görev</span>
+                                    </div>
+                                    <div class="profile-stat">
+                                        <span class="profile-stat-value" id="profileStatGames">0</span>
+                                        <span class="profile-stat-label">Oyun</span>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">Üniversite</label>
-                                    <input type="text" class="form-input" id="profileUniversity"
-                                        placeholder="Üniversiteniz">
+                            </div>
+
+                            <!-- Settings -->
+                            <div class="profile-section">
+                                <h4>Görünüm Ayarları</h4>
+                                <div class="profile-option">
+                                    <span>Tema</span>
+                                    <div class="theme-options">
+                                        <button class="theme-option" data-theme="dark">🌙 Koyu</button>
+                                        <button class="theme-option" data-theme="light">☀️ Açık</button>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">Bölüm</label>
-                                    <input type="text" class="form-input" id="profileDepartment"
-                                        value="Metalurji ve Malzeme Mühendisliği">
+                                <div id="emojiPickerContainer">
+                                    <!-- Emoji picker ve avatar renkleri buraya JavaScript ile yüklenecek -->
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">Sınıf</label>
-                                    <select class="form-select" id="profileYear">
-                                        <option value="1">1. Sınıf</option>
-                                        <option value="2">2. Sınıf</option>
-                                        <option value="3">3. Sınıf</option>
-                                        <option value="4">4. Sınıf</option>
-                                        <option value="master">Yüksek Lisans</option>
-                                        <option value="phd">Doktora</option>
-                                    </select>
+                            </div>
+
+                            <div class="profile-section">
+                                <h4>Güvenlik</h4>
+                                <div id="securitySettingsContainer">
+                                    <!-- Password change form -->
                                 </div>
-                                <button class="btn btn-primary" id="saveProfileBtn" style="margin-top: 16px;">
-                                    💾 Kaydet
+                            </div>
+
+                            <div class="profile-section">
+                                <h4>💾 Veri Yönetimi</h4>
+                                <div
+                                    style="background: var(--gradient-cool); padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+                                    <p style="font-size: 13px; color: white; opacity: 0.9; margin-bottom: 12px;">
+                                        📱 Verilerinizi başka cihaza taşımak için aşağıdaki butonları kullanın.
+                                    </p>
+                                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                        <button class="btn"
+                                            style="background: rgba(255,255,255,0.2); color: white; flex: 1; min-width: 140px;"
+                                            onclick="Profile.exportData()">
+                                            ⬇️ Yedeği İndir
+                                        </button>
+                                        <button class="btn"
+                                            style="background: rgba(255,255,255,0.2); color: white; flex: 1; min-width: 140px;"
+                                            onclick="Profile.showImportDialog()">
+                                            ⬆️ Yedeği Yükle
+                                        </button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-danger" id="clearDataBtn" onclick="Profile.confirmClearData()"
+                                    style="width: 100%;">
+                                    🗑️ Tüm Verileri Sıfırla
                                 </button>
                             </div>
-                        </div>
 
-                        <div class="profile-section">
-                            <h4>Görünüm Ayarları</h4>
-                            <div class="profile-option">
-                                <span>Tema</span>
-                                <div class="theme-options">
-                                    <button class="theme-option" data-theme="dark">🌙 Koyu</button>
-                                    <button class="theme-option" data-theme="light">☀️ Açık</button>
+                            <div class="profile-section">
+                                <h4>Oturum</h4>
+                                <div class="profile-actions">
+                                    <button class="btn btn-danger" id="logoutBtn" style="width: 100%;">
+                                        🚪 Çıkış Yap
+                                    </button>
                                 </div>
-                            </div>
-                            <div id="emojiPickerContainer">
-                                <!-- Emoji picker ve avatar renkleri buraya JavaScript ile yüklenecek -->
+                                <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                                    Çıkış yaptığınızda verileriniz silinmez, sadece oturum kapatılır.
+                                </p>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="profile-section">
-                            <h4>Güvenlik</h4>
-                            <div id="securitySettingsContainer">
-                                <!-- Password change form -->
-                            </div>
-                        </div>
-
-                        <div class="profile-section">
-                            <h4>Veri Yönetimi</h4>
-                            <div class="profile-actions">
-                                <button class="btn btn-secondary" id="exportDataBtn">
-                                    📤 Veriyi Dışa Aktar
-                                </button>
-                                <button class="btn btn-secondary" id="importDataBtn">
-                                    📥 Veriyi İçe Aktar
-                                </button>
-                                <button class="btn btn-danger" id="clearDataBtn">
-                                    🗑️ Tüm Verileri Sil
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="profile-section">
-                            <h4>Oturum</h4>
-                            <div class="profile-actions">
-                                <button class="btn btn-danger" id="logoutBtn" style="width: 100%;">
-                                    🚪 Çıkış Yap
-                                </button>
-                            </div>
-                            <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
-                                Çıkış yaptığınızda verileriniz silinmez, sadece oturum kapatılır.
-                            </p>
-                        </div>
-
-                        <div class="profile-section">
-                            <h4>İstatistikler</h4>
-                            <div class="profile-stats">
-                                <div class="profile-stat">
-                                    <span class="profile-stat-value" id="profileStatLessons">0</span>
-                                    <span class="profile-stat-label">Ders</span>
-                                </div>
-                                <div class="profile-stat">
-                                    <span class="profile-stat-value" id="profileStatBooks">0</span>
-                                    <span class="profile-stat-label">Kitap</span>
-                                </div>
-                                <div class="profile-stat">
-                                    <span class="profile-stat-value" id="profileStatTasks">0</span>
-                                    <span class="profile-stat-label">Görev</span>
-                                </div>
-                                <div class="profile-stat">
-                                    <span class="profile-stat-value" id="profileStatGames">0</span>
-                                    <span class="profile-stat-label">Oyun</span>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Fixed Floating Action Button for Save -->
+                    <div class="profile-save-fab-container">
+                        <button class="btn btn-primary btn-save-profile-fab" id="saveProfileBtn">
+                            💾 Kaydet
+                        </button>
                     </div>
                 </section>
 

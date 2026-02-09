@@ -140,10 +140,6 @@ const Exams = {
             return;
         }
 
-        // Add urgent styling to countdown when ≤7 days remaining
-        const isUrgent = time.days <= 7;
-        countdownEl.classList.toggle('countdown-urgent', isUrgent);
-
         countdownEl.innerHTML = `
             <div class="countdown-unit">
                 <span class="countdown-value">${time.days}</span>
@@ -297,11 +293,10 @@ const Exams = {
 
         grid.innerHTML = sortedExams.map(exam => {
             const time = this.getTimeRemaining(exam.date, exam.time);
-            const isUrgent = !time.expired && time.days <= 3;
             const examDateTime = new Date(`${exam.date}T${exam.time}`);
 
             return `
-                <div class="exam-card ${isUrgent ? 'urgent' : ''} ${time.expired ? 'expired' : ''}">
+                <div class="exam-card ${time.expired ? 'expired' : ''}">
                     <div class="exam-header">
                         <h3 class="exam-name">${exam.name}</h3>
                         <button class="exam-delete" onclick="if(confirm('Bu sınavı silmek istiyor musunuz?')) Exams.remove('${exam.id}')" title="Sil">×</button>

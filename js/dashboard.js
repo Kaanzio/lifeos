@@ -5,9 +5,19 @@
 
 const Dashboard = {
     timerInterval: null,
+    quickSitesEditMode: false,
+
+    // Default icons for quick sites
+    siteIcons: [
+        '🌐', '📧', '📚', '🎓', '💼', '🔍', '📰', '🎵', '📺', '🛒',
+        '💬', '📱', '🏠', '⚙️', '🔗', '🎬', '🎮', '🎨', '🥑', '🍎',
+        '✈️', '🏨', '🏦', '💊', '🧬', '🔭', '💻', '⌨️', '🖱️', '📷'
+    ],
 
     init() {
+        this.loadQuickSites();
         this.render();
+        this.renderQuickSites();
     },
 
     render() {
@@ -17,6 +27,47 @@ const Dashboard = {
         this.updateUpcoming();
         this.updateQuote();
         this.markToday();
+    },
+
+    // ... (quotes array skipped)
+
+    // Quick Sites Management
+    quickSites: [],
+
+    loadQuickSites() {
+        this.quickSites = Storage.load('lifeos_quick_sites', [
+            { id: 1, name: 'Google', url: 'https://google.com', icon: '🔍' },
+            { id: 2, name: 'YouTube', url: 'https://youtube.com', icon: '📺' },
+            { id: 3, name: 'GitHub', url: 'https://github.com', icon: '💻' },
+            { id: 4, name: 'ChatGPT', url: 'https://chat.openai.com', icon: '🤖' }
+        ]);
+
+        // Remove old placeholder if exists
+        this.quickSites = this.quickSites.filter(s => s.name !== 'Site Ekle');
+    },
+
+    saveQuickSites() {
+        Storage.save('lifeos_quick_sites', this.quickSites);
+    },
+
+    renderQuickSites() {
+        const grid = document.getElementById('quickSitesGrid');
+        if (!grid) return;
+
+        if (this.quickSites.length === 0) {
+            grid.innerHTML = '<p class="empty-state" style="width: 100%; text-align: center;">Henüz site eklenmedi</p>';
+            return;
+        }
+
+        grid.innerHTML = this.quickSites.map((site, index) => {
+            return `
+                <a href="${site.url}" target="_blank" class="quick-site-btn" title="${site.name}">
+                    <span class="quick-site-icon">${site.icon}</span>
+                    <span class="quick-site-name">${site.name}</span>
+                    ${this.quickSitesEditMode ? `<button class="quick-site-edit" onclick="event.preventDefault(); Dashboard.showQuickSiteModal(${index})">✏️</button>` : ''}
+                </a>
+            `;
+        }).join('');
     },
 
     // Motivational quotes from famous people
@@ -268,15 +319,15 @@ const Dashboard = {
             // Initial render placeholder, will be updated by interval immediately
 
             return `
-                <div id="upcoming-item-${index}" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-tertiary); border-radius: var(--border-radius-sm); margin-bottom: 8px;">
-                    <span style="font-size: 20px;">${item.icon}</span>
+                <div id="upcoming-item-${index}" style="display: flex; align-items: center; gap: 16px; padding: 14px 16px; background: var(--bg-tertiary); border-radius: var(--border-radius-sm); margin-bottom: 10px;">
+                    <span style="font-size: 24px;">${item.icon}</span>
                     <div style="flex: 1; min-width: 0;">
-                        <div style="font-weight: 500; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.title}</div>
-                        <div style="font-size: 11px; color: var(--text-muted);">${this.formatDate(item.date)}</div>
+                        <div style="font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.title}</div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">${this.formatDate(item.date)}</div>
                     </div>
-                    <div style="text-align: right; min-width: 90px;">
-                        <div id="dashboard-countdown-${index}" style="font-weight: 600; font-size: 14px; color: var(--primary); font-variant-numeric: tabular-nums;">--:--:--</div>
-                        <div id="dashboard-countdown-label-${index}" style="font-size: 10px; color: var(--text-muted);">kaldı</div>
+                    <div style="text-align: right; min-width: 110px;">
+                        <div id="dashboard-countdown-${index}" style="font-weight: 700; font-size: 18px; color: var(--primary); font-variant-numeric: tabular-nums;">--:--:--</div>
+                        <div id="dashboard-countdown-label-${index}" style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">kaldı</div>
                     </div>
                 </div>
             `;
@@ -292,16 +343,7 @@ const Dashboard = {
 
                 if (countEl) {
                     countEl.textContent = time.display;
-                    // Update urgency styles
-                    if (time.urgent) {
-                        countEl.style.color = 'var(--danger)';
-                        if (itemEl) {
-                            itemEl.style.background = 'rgba(239, 68, 68, 0.1)';
-                            itemEl.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-                        }
-                    } else {
-                        countEl.style.color = 'var(--primary)';
-                    }
+                    countEl.style.color = 'var(--primary)';
                 }
                 if (labelEl) labelEl.textContent = time.label;
             });
@@ -331,15 +373,13 @@ const Dashboard = {
             // This applies to both Tasks (to 23:59) and Exams (to specific time)
             return {
                 display: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`,
-                label: 'kaldı',
-                urgent: true
+                label: 'kaldı'
             };
         } else {
             // More than 24h (including tomorrow): Show days + hours + minutes
             return {
                 display: `${days}g ${hours}s ${minutes}dk`,
-                label: 'kaldı',
-                urgent: days <= 3 && type === 'exam'
+                label: 'kaldı'
             };
         }
     },
@@ -412,5 +452,144 @@ const Dashboard = {
 
         Storage.save('lifeos_weekly_progress', weeklyProgress);
         this.updateWeeklyChart();
+    },
+
+    // Quick Sites Management
+    quickSites: [],
+
+    loadQuickSites() {
+        this.quickSites = Storage.load('lifeos_quick_sites', [
+            { id: 1, name: 'Google', url: 'https://google.com', icon: '🔍' },
+            { id: 2, name: 'YouTube', url: 'https://youtube.com', icon: '📺' },
+            { id: 3, name: 'GitHub', url: 'https://github.com', icon: '💻' },
+            { id: 4, name: 'ChatGPT', url: 'https://chat.openai.com', icon: '🤖' }
+        ]);
+
+        // Clean up any old "Site Ekle" placeholders if they exist in storage
+        this.quickSites = this.quickSites.filter(s => s.name !== 'Site Ekle');
+    },
+
+    saveQuickSites() {
+        Storage.save('lifeos_quick_sites', this.quickSites);
+    },
+
+    renderQuickSites() {
+        const grid = document.getElementById('quickSitesGrid');
+        if (!grid) return;
+
+        if (this.quickSites.length === 0) {
+            grid.innerHTML = '<p class="empty-state" style="width: 100%; text-align: center;">Henüz site eklenmedi</p>';
+            return;
+        }
+
+        grid.innerHTML = this.quickSites.map((site, index) => {
+            return `
+                <a href="${site.url}" target="_blank" class="quick-site-btn" title="${site.name}">
+                    <span class="quick-site-icon">${site.icon}</span>
+                    <span class="quick-site-name">${site.name}</span>
+                    ${this.quickSitesEditMode ? `<button class="quick-site-edit" onclick="event.preventDefault(); Dashboard.showQuickSiteModal(${index})">✏️</button>` : ''}
+                </a>
+            `;
+        }).join('');
+    },
+
+    toggleQuickSitesEdit() {
+        this.quickSitesEditMode = !this.quickSitesEditMode;
+        this.renderQuickSites();
+
+        const btn = document.querySelector('.quick-sites-edit-btn');
+        if (btn) {
+            btn.textContent = this.quickSitesEditMode ? '✓' : '⚙️';
+            btn.title = this.quickSitesEditMode ? 'Tamamla' : 'Düzenle';
+        }
+    },
+
+    showQuickSiteModal(index) {
+        const isNew = index === -1;
+        const site = isNew
+            ? { id: Date.now(), name: '', url: '', icon: '🌐' }
+            : this.quickSites[index];
+
+        const modalBody = document.getElementById('modalBody');
+        const modalTitle = document.getElementById('modalTitle');
+
+        modalTitle.textContent = isNew ? 'Yeni Site Ekle' : 'Siteyi Düzenle';
+        modalBody.innerHTML = `
+            <form id="quickSiteForm">
+                <div class="form-group">
+                    <label class="form-label">🏷️ Site Adı</label>
+                    <input type="text" class="form-input" name="name" required
+                           placeholder="Google, YouTube, vb."
+                           value="${isNew ? '' : site.name}">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">🔗 URL</label>
+                    <input type="url" class="form-input" name="url" required
+                           placeholder="https://..."
+                           value="${isNew ? '' : site.url}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🎨 İkon Seç</label>
+                    <div class="icon-picker-grid">
+                        ${this.siteIcons.map(icon => `
+                            <button type="button" class="icon-picker-btn ${site.icon === icon ? 'active' : ''}"
+                                    onclick="Dashboard.selectSiteIcon('${icon}', this)">
+                                ${icon}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <input type="hidden" name="icon" value="${site.icon}">
+                </div>
+
+                <div class="modal-footer" style="padding: 0; border: none; margin-top: 24px;">
+                    ${!isNew ? `<button type="button" class="btn btn-danger" onclick="Dashboard.deleteQuickSite(${index})">Sil</button>` : ''}
+                    <button type="button" class="btn btn-secondary" onclick="App.closeModal()">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        `;
+
+        App.openModal();
+
+        document.getElementById('quickSiteForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            const newSiteData = {
+                id: site.id || Date.now(),
+                name: formData.get('name'),
+                url: formData.get('url'),
+                icon: formData.get('icon') || '🌐'
+            };
+
+            if (isNew) {
+                this.quickSites.push(newSiteData);
+            } else {
+                this.quickSites[index] = newSiteData;
+            }
+
+            this.saveQuickSites();
+            this.renderQuickSites();
+            App.closeModal();
+            Notifications.add('Site Kaydedildi', `"${formData.get('name')}" ${isNew ? 'eklendi' : 'güncellendi'}.`, 'success');
+        });
+    },
+
+    selectSiteIcon(icon, btn) {
+        document.querySelectorAll('.icon-picker-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelector('input[name="icon"]').value = icon;
+    },
+
+    deleteQuickSite(index) {
+        if (confirm('Bu siteyi silmek istiyor musunuz?')) {
+            this.quickSites.splice(index, 1);
+            this.saveQuickSites();
+            this.renderQuickSites();
+            App.closeModal();
+            Notifications.add('Site Silindi', 'Site kaldırıldı.', 'info');
+        }
     }
 };

@@ -10,7 +10,7 @@ const Books = {
     filterCategory: 'all',
     filterStatus: 'all',
 
-    categories: ['Roman', 'Bilim', 'Kişisel Gelişim', 'Tarih', 'Felsefe', 'Teknik', 'Genel'],
+    categories: ['Roman', 'Bilim', 'Kişisel Gelişim', 'Tarih', 'Felsefe', 'Teknik', 'Genel', 'Dizi', 'Film'],
 
     init() {
         this.container = document.getElementById('booksGrid');

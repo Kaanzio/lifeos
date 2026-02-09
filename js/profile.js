@@ -6,6 +6,8 @@
 const Profile = {
     profile: null,
     showEmojiPicker: false,
+    hasUnsavedChanges: false,
+    initialValues: null,
 
     // Avatar için kullanılabilecek emojiler
     avatarEmojis: [
@@ -19,18 +21,29 @@ const Profile = {
         this.loadProfile();
         this.bindEvents();
         this.render();
+        this.setupUnsavedChangesWarning();
     },
 
     loadProfile() {
         this.profile = Storage.load('lifeos_profile', {
             name: '',
             university: '',
-            department: 'Metalurji ve Malzeme Mühendisliği',
-            year: '1',
+            department: '',
+            year: '',
             avatarColor: '#8b5cf6',
             avatarEmoji: '',
-            profileBgColor: '' // Profil kartı arkaplan rengi
+            profileBgColor: ''
         });
+
+        // WIPE LEGACY DEFAULT DATA (Metalurji...)
+        // If the user hasn't changed it from the old hardcoded default, clear it.
+        if (this.profile.department === 'Metalurji ve Malzeme Mühendisliği') {
+            this.profile.department = '';
+        }
+
+        // FORCE EMPTY DEFAULTS if not set
+        if (!this.profile.department) this.profile.department = '';
+        if (!this.profile.year) this.profile.year = '';
     },
 
     saveProfile() {
@@ -57,7 +70,7 @@ const Profile = {
         const name = document.getElementById('profileNameInput')?.value || '';
         const university = document.getElementById('profileUniversity')?.value || '';
         const department = document.getElementById('profileDepartment')?.value || '';
-        const year = document.getElementById('profileYear')?.value || '1';
+        const year = document.getElementById('profileYear')?.value || '';
 
         this.profile.name = name;
         this.profile.university = university;
@@ -70,6 +83,8 @@ const Profile = {
         Storage.save(Storage.KEYS.SETTINGS, settings);
 
         this.saveProfile();
+        this.hasUnsavedChanges = false;
+        // this.storeInitialValues(); // Removed to simplify
         this.render();
         App.updateUserDisplay();
 
@@ -113,6 +128,9 @@ const Profile = {
         const name = this.profile.name || settings.userName || 'Kullanıcı';
         const initial = name.charAt(0).toUpperCase();
 
+        // Round 11: Department display removed from header
+        // No longer updating 'profileDepartmentDisplay'
+
         // Apply to all avatars
         document.querySelectorAll('.user-avatar, .profile-avatar-large').forEach(el => {
             el.style.background = emoji ? 'var(--bg-tertiary)' : color;
@@ -153,24 +171,23 @@ const Profile = {
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.json';
-        input.onchange = (e) => {
+        input.onchange = e => {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    try {
-                        if (Storage.importData(ev.target.result)) {
-                            Notifications.add('Veri İçe Aktarıldı', 'Verileriniz başarıyla yüklendi. Sayfa yenileniyor...', 'success');
-                            setTimeout(() => location.reload(), 1500);
-                        } else {
-                            Notifications.add('Hata', 'Veri içe aktarılamadı.', 'error');
-                        }
-                    } catch (err) {
-                        Notifications.add('Hata', 'Geçersiz dosya formatı.', 'error');
-                    }
-                };
-                reader.readAsText(file);
-            }
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = event => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    Storage.importData(data);
+                    Notifications.add('Veri İçe Aktarıldı', 'Sayfa yenileniyor...', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } catch (error) {
+                    console.error('Import failed:', error);
+                    Notifications.add('Hata', 'Yedek dosyası geçersiz.', 'error');
+                }
+            };
+            reader.readAsText(file);
         };
         input.click();
     },
@@ -179,6 +196,11 @@ const Profile = {
         if (confirm('⚠️ Tüm verileriniz silinecek!\n\nBu işlem geri alınamaz. Devam etmek istiyor musunuz?')) {
             if (confirm('Emin misiniz? Tüm dersler, kitaplar, oyunlar ve görevler silinecek.')) {
                 Storage.clearAll();
+
+                // Explicitly clear profile default override logic
+                // This ensures next load starts fresh with "Seçiniz"
+                localStorage.removeItem('lifeos_profile');
+
                 Notifications.add('Veriler Silindi', 'Tüm verileriniz temizlendi. Sayfa yenileniyor...', 'info');
                 setTimeout(() => location.reload(), 1500);
             }
@@ -402,5 +424,89 @@ const Profile = {
         } else if (card) {
             card.style.background = '';
         }
+    },
+
+    // Store initial form values for comparison
+    storeInitialValues() {
+        this.initialValues = {
+            name: document.getElementById('profileNameInput')?.value || '',
+            university: document.getElementById('profileUniversity')?.value || '',
+            department: document.getElementById('profileDepartment')?.value || '',
+            year: document.getElementById('profileYear')?.value || '1'
+        };
+        this.hasUnsavedChanges = false;
+    },
+
+    // Check if form values have changed
+    checkForChanges() {
+        if (!this.initialValues) return false;
+
+        const current = {
+            name: document.getElementById('profileNameInput')?.value || '',
+            university: document.getElementById('profileUniversity')?.value || '',
+            department: document.getElementById('profileDepartment')?.value || '',
+            year: document.getElementById('profileYear')?.value || '1'
+        };
+
+        return current.name !== this.initialValues.name ||
+            current.university !== this.initialValues.university ||
+            current.department !== this.initialValues.department ||
+            current.year !== this.initialValues.year;
+    },
+
+    // Revert form to initial values
+    revertChanges() {
+        if (!this.initialValues) return;
+
+        const nameInput = document.getElementById('profileNameInput');
+        const uniInput = document.getElementById('profileUniversity');
+        const deptInput = document.getElementById('profileDepartment');
+        const yearInput = document.getElementById('profileYear');
+
+        if (nameInput) nameInput.value = this.initialValues.name;
+        if (uniInput) uniInput.value = this.initialValues.university;
+        if (deptInput) deptInput.value = this.initialValues.department;
+        if (yearInput) yearInput.value = this.initialValues.year;
+
+        this.hasUnsavedChanges = false;
+    },
+
+    // Setup unsaved changes warning
+    setupUnsavedChangesWarning() {
+        // Store initial values after render
+        setTimeout(() => this.storeInitialValues(), 100);
+
+        // Track changes on input fields
+        const inputs = ['profileNameInput', 'profileUniversity', 'profileDepartment', 'profileYear'];
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', () => {
+                    this.hasUnsavedChanges = this.checkForChanges();
+                });
+            }
+        });
+
+        // Warn before leaving page with unsaved changes
+        window.addEventListener('beforeunload', (e) => {
+            if (this.hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = 'Kaydedilmemiş değişiklikleriniz var. Çıkmak istediğinize emin misiniz?';
+                return e.returnValue;
+            }
+        });
+    },
+
+    // Check unsaved changes before navigation (called from App.navigateTo)
+    confirmLeave() {
+        if (this.hasUnsavedChanges) {
+            const leave = confirm('⚠️ Kaydedilmemiş değişiklikleriniz var!\n\nKaydetmeden çıkmak istiyor musunuz?');
+            if (leave) {
+                this.revertChanges();
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
 };

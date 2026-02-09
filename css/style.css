@@ -2862,11 +2862,6 @@ button {
     box-shadow: var(--shadow-glow);
 }
 
-.exam-card.urgent {
-    border-color: var(--warning);
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, transparent 100%);
-}
-
 .exam-card.expired {
     opacity: 0.6;
     border-color: var(--text-muted);
@@ -3217,33 +3212,6 @@ button {
 }
 
 /* ==========================================
-   Exam Countdown Urgent Styles
-   ========================================== */
-
-.countdown-urgent {
-    border: 2px solid var(--danger) !important;
-    border-radius: var(--border-radius);
-    background: rgba(239, 68, 68, 0.1) !important;
-    padding: 16px;
-    animation: pulse-urgent 2s ease-in-out infinite;
-}
-
-.countdown-urgent .countdown-value {
-    color: var(--danger) !important;
-}
-
-@keyframes pulse-urgent {
-
-    0%,
-    100% {
-        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
-    }
-
-    50% {
-        box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
-    }
-}
-
 /* ==========================================
    Pomodoro Module
    ========================================== */
@@ -3828,4 +3796,1357 @@ button {
     margin-bottom: 16px;
     font-size: 13px;
     display: none;
+}
+
+/* ==========================================
+   Mobile Responsive Styles
+   ========================================== */
+
+/* Tablet and below */
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+        height: 100vh;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .header {
+        left: 0;
+        width: 100%;
+    }
+
+    .menu-toggle {
+        display: flex !important;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 768px) {
+    :root {
+        --header-height: 60px;
+    }
+
+    .header {
+        padding: 0 16px;
+    }
+
+    .header-title {
+        font-size: 18px;
+    }
+
+    .page {
+        padding: 16px;
+    }
+
+    .page-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .page-header h2 {
+        font-size: 20px;
+    }
+
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .module-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kanban-board {
+        flex-direction: column;
+    }
+
+    .kanban-column {
+        min-width: 100%;
+    }
+
+    .profile-container {
+        padding: 16px;
+    }
+
+    .profile-card {
+        padding: 20px;
+    }
+
+    .profile-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .auth-card {
+        margin: 16px;
+        padding: 24px;
+    }
+
+    .pomodoro-timer {
+        font-size: 48px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-links {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .modal-content {
+        width: 95%;
+        max-height: 90vh;
+        margin: 16px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-links {
+        grid-template-columns: 1fr;
+    }
+
+    .view-selector {
+        flex-direction: column;
+    }
+
+    .view-btn {
+        width: 100%;
+    }
+
+    .theme-options {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .theme-option {
+        width: 100%;
+    }
+}
+
+/* Sidebar Overlay for Mobile */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* Menu Toggle Button */
+.menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--bg-card);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.menu-toggle:hover {
+    background: var(--bg-card-hover);
+}
+
+/* PWA Safe Area */
+@supports (padding-top: env(safe-area-inset-top)) {
+    .header {
+        padding-top: env(safe-area-inset-top);
+    }
+
+    .sidebar {
+        padding-top: env(safe-area-inset-top);
+    }
+}
+
+/* ==========================================
+   Pomodoro Styles
+   ========================================== */
+.pomodoro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 24px;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.pomodoro-timer-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: 48px 32px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.pomodoro-timer {
+    font-size: 80px;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', monospace;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+}
+
+.pomodoro-timer.work {
+    color: var(--accent-purple);
+}
+
+.pomodoro-timer.break {
+    color: var(--accent-green);
+}
+
+.pomodoro-status {
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-bottom: 24px;
+}
+
+.pomodoro-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pomodoro-btn {
+    padding: 12px 28px;
+    border-radius: var(--border-radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.pomodoro-btn.primary {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.pomodoro-btn.secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.pomodoro-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.pomodoro-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.pomodoro-stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: 20px;
+    text-align: center;
+}
+
+.pomodoro-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent-purple);
+}
+
+.pomodoro-stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.pomodoro-settings {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: 24px;
+    width: 100%;
+}
+
+.pomodoro-settings h3 {
+    margin-bottom: 16px;
+    font-size: 16px;
+}
+
+.pomodoro-setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.pomodoro-setting-row:last-child {
+    border-bottom: none;
+}
+
+.pomodoro-setting-row label {
+    color: var(--text-secondary);
+}
+
+.pomodoro-setting-row input {
+    width: 80px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .pomodoro-timer {
+        font-size: 56px;
+    }
+
+    .pomodoro-timer-card {
+        padding: 32px 20px;
+    }
+
+    .pomodoro-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================
+   Exam Card Styles
+   ========================================== */
+.exam-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    transition: var(--transition-fast);
+}
+
+.exam-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow);
+}
+
+.exam-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.exam-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.exam-delete {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    opacity: 0;
+    transition: var(--transition-fast);
+}
+
+.exam-card:hover .exam-delete {
+    opacity: 1;
+}
+
+.exam-delete:hover {
+    color: var(--danger);
+}
+
+.exam-lesson {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.exam-datetime {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.exam-countdown {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 12px;
+}
+
+.countdown-unit {
+    text-align: center;
+    min-width: 50px;
+}
+
+.countdown-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: block;
+}
+
+.countdown-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.countdown-separator {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-muted);
+    line-height: 1;
+    padding-top: 4px;
+}
+
+.countdown-expired {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.exam-notes {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+.exam-card.expired {
+    opacity: 0.6;
+}
+
+/* ==========================================
+   Schedule (Ders Programı) - Table Design
+   ========================================== */
+.schedule-week {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.schedule-day-column {
+    background: var(--bg-card);
+    min-height: 400px;
+}
+
+.schedule-day-header {
+    background: var(--gradient-primary);
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    padding: 14px 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.schedule-day-content {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.schedule-empty {
+    color: var(--text-muted);
+    text-align: center;
+    padding: 40px 8px;
+    font-size: 14px;
+}
+
+.schedule-entry {
+    background: var(--bg-tertiary);
+    border-left: 3px solid var(--accent-purple);
+    border-radius: 0 8px 8px 0;
+    padding: 12px;
+    position: relative;
+    transition: var(--transition-fast);
+}
+
+.schedule-entry:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-entry-time {
+    font-size: 11px;
+    color: var(--accent-cyan);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.schedule-entry-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.schedule-entry-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: var(--transition-fast);
+    padding: 4px;
+}
+
+.schedule-entry:hover .schedule-entry-delete {
+    opacity: 1;
+}
+
+.schedule-entry-delete:hover {
+    color: var(--danger);
+}
+
+@media (max-width: 1024px) {
+    .schedule-week {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .schedule-week {
+        grid-template-columns: 1fr;
+    }
+
+    .schedule-day-column {
+        min-height: auto;
+    }
+
+    .schedule-empty {
+        padding: 20px 8px;
+    }
+}
+
+/* ==========================================
+   Notes Enhanced Styles
+   ========================================== */
+.notes-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    height: calc(100vh - var(--header-height) - 140px);
+    min-height: 500px;
+}
+
+.notes-sidebar {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.notes-toolbar {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.notes-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.note-item {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.note-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.note-item.active {
+    background: var(--accent-purple)15;
+    border-left: 3px solid var(--accent-purple);
+}
+
+.note-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.note-category-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.note-item-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.note-item-preview {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 6px;
+}
+
+.note-item-date {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.notes-stats {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border-color);
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    gap: 12px;
+}
+
+.notes-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.notes-empty-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.note-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.note-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.note-title-input {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    width: 100%;
+    outline: none;
+}
+
+.note-title-input:focus {
+    border-bottom: 2px solid var(--accent-purple);
+}
+
+.note-view-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.note-view-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.note-content-editor {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1.7;
+    resize: none;
+    outline: none;
+    font-family: inherit;
+}
+
+@media (max-width: 768px) {
+    .notes-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .notes-sidebar {
+        max-height: 300px;
+    }
+}
+
+/* ==========================================
+   Enhanced Notes - Toolbar & Stats
+   ========================================== */
+
+.note-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    background: var(--bg-glass);
+    border-radius: var(--border-radius-sm);
+    margin: 12px 0;
+    flex-wrap: wrap;
+}
+
+.note-tool-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.note-tool-btn:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+}
+
+.note-tool-btn:active {
+    transform: scale(0.95);
+}
+
+.note-tool-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border-color);
+    margin: 0 6px;
+}
+
+.note-stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px;
+    background: var(--bg-glass);
+    border-radius: var(--border-radius-sm);
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+}
+
+.note-stats-bar span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Note View Enhanced */
+.note-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    transition: background var(--transition-normal);
+}
+
+.note-view-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.note-view-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.note-title-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    padding: 8px 0;
+    margin-bottom: 8px;
+}
+
+.note-title-input:focus {
+    outline: none;
+    border-bottom: 2px solid var(--accent-purple);
+}
+
+.note-view-content {
+    flex: 1;
+    min-height: 200px;
+}
+
+.note-content-editor {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    font-family: inherit;
+    resize: vertical;
+}
+
+.note-content-editor:focus {
+    outline: none;
+    border-color: var(--accent-purple);
+}
+
+.note-content-editor::placeholder {
+    color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+    .note-toolbar {
+        padding: 6px 8px;
+    }
+
+    .note-tool-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .note-stats-bar {
+        gap: 10px;
+        font-size: 11px;
+    }
+}
+
+/* ==========================================
+   Profile Enhancement (Round 9)
+   ========================================== */
+
+/* ==========================================
+   Profile Layout (Round 12 - Unified Container)
+   ========================================== */
+.profile-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* 2 Equal Columns */
+    gap: 32px;
+    /* Internal spacing between columns */
+    align-items: start;
+
+    /* The "Imaginary Rectangle" made visible */
+    background: var(--bg-secondary);
+    border-radius: 32px;
+    /* Large rounded corners */
+    padding: 32px;
+    /* Space inside the rectangle */
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+/* Ensure internal columns stretch */
+.profile-col-left,
+.profile-col-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: 100%;
+}
+
+/* Contrast adjustment for internal cards since container is now bg-secondary */
+.profile-card,
+.profile-section {
+    background: var(--bg-tertiary) !important;
+    /* Stand out from container */
+    border: 1px solid var(--border-color);
+    box-shadow: none !important;
+    /* Flat look inside container */
+}
+
+@media (max-width: 900px) {
+    .profile-grid-layout {
+        grid-template-columns: 1fr;
+        /* Stack on mobile/tablet */
+    }
+}
+
+/* Floating Action Button (FAB) for Save */
+.profile-save-fab-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.btn-save-profile-fab {
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-save-profile-fab:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+}
+
+/* Dashboard Grid Symmetry */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    align-items: start;
+}
+
+.dashboard-grid>.card {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Quick Sites */
+.dashboard-quick-sites {
+    background: var(--bg-secondary);
+    border-radius: 24px !important;
+    /* Forces Roundness (Round 11) */
+    padding: 24px;
+    height: 100%;
+    overflow: hidden;
+    /* Ensures content doesn't clip corners */
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.quick-sites-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+}
+
+.quick-sites-header h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: none;
+    /* Remove uppercase to match others if needed */
+    letter-spacing: normal;
+    margin: 0;
+}
+
+.quick-sites-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.quick-sites-edit-btn,
+.quick-sites-add-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background 0.2s;
+    line-height: 1;
+}
+
+.quick-sites-edit-btn:hover,
+.quick-sites-add-btn:hover {
+    background: var(--bg-tertiary);
+}
+
+.quick-sites-grid {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    /* Center alignment requested */
+}
+
+.quick-site-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    width: 70px;
+    padding: 8px;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.2s;
+    position: relative;
+}
+
+.quick-site-btn:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ==========================================
+   Dashboard Panel Consistency & Roundness
+   ========================================== */
+
+/* Unified style with rounded corners */
+.dashboard-panel {
+    background: var(--bg-secondary);
+    border-radius: 24px;
+    /* Increased Roundness (Round 10) */
+    padding: 24px;
+    /* Slightly more padding */
+    height: 100%;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+}
+
+.panel-header h3 {
+    font-size: 18px;
+    /* Slightly larger header */
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Quick Actions Grid */
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    /* Increased gap */
+}
+
+/* Rounded Buttons */
+.quick-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: left;
+}
+
+.quick-btn:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--primary);
+}
+
+.quick-btn-icon {
+    font-size: 20px;
+}
+
+.quick-btn span:last-child {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Quick Sites Styling Matches Panels */
+.dashboard-quick-sites {
+    background: var(--bg-secondary);
+    /* Matches panels */
+    border-radius: var(--border-radius-md);
+    padding: 20px;
+    height: 100%;
+    /* Optional: Add border if others have it, usually panels dont in this design */
+}
+
+/* Enhanced Quick Site Buttons */
+.quick-site-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    width: 80px;
+    /* Slightly wider */
+    padding: 12px 8px;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.2s;
+    position: relative;
+    background: var(--bg-tertiary);
+    /* Consistent background */
+    border: 1px solid transparent;
+}
+
+.quick-site-btn:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-light);
+}
+
+.quick-site-icon {
+    font-size: 32px;
+    /* Larger Icon */
+    margin-bottom: 2px;
+}
+
+.quick-site-name {
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.quick-site-edit {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--accent-purple);
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Icon Picker Grid */
+.icon-picker-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius-sm);
+}
+
+.icon-picker-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid transparent;
+    background: var(--bg-card);
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.icon-picker-btn:hover {
+    border-color: var(--accent-purple);
+    transform: scale(1.1);
+}
+
+.icon-picker-btn.active {
+    border-color: var(--accent-purple);
+    background: rgba(139, 92, 246, 0.2);
+}
+
+/* ==========================================
+   Habit Chain - Normal Size
+   ========================================== */
+
+.dashboard-panel.habit-chain-panel {
+    padding: 16px 20px;
+}
+
+.dashboard-panel.habit-chain-panel .panel-header h3 {
+    font-size: 15px;
+}
+
+.dashboard-habit-grid {
+    gap: 5px;
+}
+
+.dashboard-habit-day {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+}
+
+.dashboard-habit-streak {
+    padding: 10px 0 0 0;
+    margin-top: 10px;
+}
+
+.dashboard-habit-streak-value {
+    font-size: 22px;
+}
+
+/* ==========================================
+   Dashboard Uniform Grid Layout
+   ========================================== */
+
+.dashboard-grid-v2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto auto auto;
+    gap: 20px;
+    padding: 0;
+}
+
+/* Row 1: Welcome - Full Width */
+.dashboard-welcome {
+    grid-column: 1 / -1;
+}
+
+/* Row 2: Stats - Full Width */
+.dashboard-stats {
+    grid-column: 1 / -1;
+}
+
+/* Row 3: Quick Sites (left) + Quick Actions (right) */
+.dashboard-quick-sites {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.dashboard-panel.quick-panel {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+/* Row 4-5: Tasks (left) + Habit Chain & Upcoming (right) */
+.dashboard-panel.tasks-panel {
+    grid-column: 1;
+    grid-row: 4 / 6;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.dashboard-panel.tasks-panel .panel-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.dashboard-panel.habit-chain-panel {
+    grid-column: 2;
+    grid-row: 4;
+}
+
+.dashboard-panel.upcoming-panel {
+    grid-column: 2;
+    grid-row: 5;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-panel.upcoming-panel .panel-content {
+    flex: 1;
+}
+
+/* All panels fill their grid cells */
+.dashboard-panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-panel .panel-content {
+    flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .dashboard-grid-v2 {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .dashboard-panel.tasks-panel,
+    .dashboard-panel.quick-panel,
+    .dashboard-panel.habit-chain-panel,
+    .dashboard-panel.upcoming-panel {
+        grid-column: 1;
+        grid-row: auto;
+    }
 }

@@ -241,7 +241,6 @@ const App = {
         Shows.init();
         Pomodoro.init();
         Notes.init();
-        Notes.init();
         Dashboard.init();
 
         // Optional Drive Sync
@@ -368,7 +367,14 @@ const App = {
 
         // Mobile menu
         document.getElementById('menuToggle')?.addEventListener('click', () => {
-            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay')?.classList.toggle('active');
+        });
+
+        // Sidebar overlay click
+        document.getElementById('sidebarOverlay')?.addEventListener('click', () => {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('sidebarOverlay')?.classList.remove('active');
         });
 
         // Modal
@@ -425,18 +431,71 @@ const App = {
 
     handleQuickAction(action) {
         const actionMap = {
-            addLesson: { page: 'lessons', btn: 'addLessonBtn' },
-            addBook: { page: 'books', btn: 'addBookBtn' },
-            addTask: { page: 'planning', btn: 'addTaskBtn' },
-            addGame: { page: 'games', btn: 'addGameBtn' }
+            addSeries: {
+                page: 'shows',
+                handler: () => {
+                    if (window.Shows) {
+                        Shows.showAddModal();
+                        setTimeout(() => {
+                            const typeSelect = document.querySelector('#showForm select[name="type"]');
+                            if (typeSelect) {
+                                typeSelect.value = 'dizi';
+                                // Trigger change to update UI if needed
+                                typeSelect.dispatchEvent(new Event('change'));
+                            }
+                        }, 50);
+                    }
+                }
+            },
+            addMovie: {
+                page: 'shows',
+                handler: () => {
+                    if (window.Shows) {
+                        Shows.showAddModal();
+                        setTimeout(() => {
+                            const typeSelect = document.querySelector('#showForm select[name="type"]');
+                            if (typeSelect) {
+                                typeSelect.value = 'film';
+                                typeSelect.dispatchEvent(new Event('change'));
+                            }
+                        }, 50);
+                    }
+                }
+            },
+            addTask: {
+                page: 'planning',
+                handler: () => {
+                    if (window.Planning) Planning.showAddModal();
+                }
+            },
+            addGame: {
+                page: 'games',
+                handler: () => {
+                    if (window.Games) Games.showAddModal();
+                }
+            },
+            addSite: {
+                page: 'sites',
+                handler: () => {
+                    if (window.Sites) Sites.showAddModal();
+                }
+            },
+            addChannel: {
+                page: 'youtube',
+                handler: () => {
+                    if (window.YouTube) YouTube.showAddModal();
+                }
+            }
         };
 
         const config = actionMap[action];
         if (config) {
             this.navigateTo(config.page);
-            setTimeout(() => {
-                document.getElementById(config.btn)?.click();
-            }, 100);
+
+            if (config.handler) {
+                // Execute custom handler after navigation
+                setTimeout(config.handler, 100);
+            }
         }
     },
 
@@ -455,7 +514,7 @@ const App = {
 
         // Update title
         const titles = {
-            dashboard: 'Dashboard',
+            dashboard: 'Kontrol Merkezi',
             lessons: 'Dersler',
             books: 'Kitaplar',
             sites: 'Siteler',
