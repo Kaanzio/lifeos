@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LifeOS - Hayatını Yönet</title>
+    <meta name="description" content="Hayatınızı akıllıca yönetin. Dersler, kitaplar, oyunlar ve daha fazlası.">
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="assets/icon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- Login Screen Removed (Legacy) -->
+
+    <div id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon-modern">
+                        <span>L</span>
+                    </div>
+                    <span class="logo-text-modern">Life<span class="logo-accent">OS</span></span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <!-- Ana Menü -->
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+
+                <div class="nav-section">
+                    <span class="nav-section-title">Genel</span>
+                </div>
+                <a href="#" class="nav-item" data-page="planning">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Yapılacaklar</span>
+                </a>
+                <a href="#" class="nav-item" data-page="habits">
+                    <span class="nav-icon">🔥</span>
+                    <span class="nav-text">Zinciri Kırma</span>
+                </a>
+                <a href="#" class="nav-item" data-page="pomodoro">
+                    <span class="nav-icon">🍅</span>
+                    <span class="nav-text">Pomodoro</span>
+                </a>
+                <a href="#" class="nav-item" data-page="notes">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">Not Defteri</span>
+                </a>
+                <a href="#" class="nav-item" data-page="sites">
+                    <span class="nav-icon">🌐</span>
+                    <span class="nav-text">Siteler</span>
+                </a>
+
+                <div class="nav-section">
+                    <span class="nav-section-title">Ders</span>
+                </div>
+                <a href="#" class="nav-item" data-page="lessons">
+                    <span class="nav-icon">🎓</span>
+                    <span class="nav-text">Dersler</span>
+                </a>
+                <a href="#" class="nav-item" data-page="exams">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">Sınavlar</span>
+                </a>
+                <a href="#" class="nav-item" data-page="schedule">
+                    <span class="nav-icon">📆</span>
+                    <span class="nav-text">Ders Programı</span>
+                </a>
+
+                <div class="nav-section">
+                    <span class="nav-section-title">Eğlence ve Kitap</span>
+                </div>
+                <a href="#" class="nav-item" data-page="books">
+                    <span class="nav-icon">📖</span>
+                    <span class="nav-text">Kitaplar</span>
+                </a>
+                <a href="#" class="nav-item" data-page="shows">
+                    <span class="nav-icon">🎬</span>
+                    <span class="nav-text">Dizi / Film</span>
+                </a>
+                <a href="#" class="nav-item" data-page="games">
+                    <span class="nav-icon">🎮</span>
+                    <span class="nav-text">Oyunlar</span>
+                </a>
+                <a href="#" class="nav-item" data-page="youtube">
+                    <span class="nav-icon">▶️</span>
+                    <span class="nav-text">YouTube</span>
+                </a>
+
+                <div class="nav-section">
+                    <span class="nav-section-title">Hesap</span>
+                </div>
+                <a href="#" class="nav-item" data-page="profile">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">Profil</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="footer-btn" id="themeToggle" title="Tema Değiştir">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="footer-btn" id="exportBtn" title="Veri Dışa Aktar">
+                    <span>💾</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn notification-btn" id="notificationBtn" title="Bildirimler">
+                        <span>🔔</span>
+                        <span class="notification-badge" id="notificationBadge">0</span>
+                    </button>
+                    <div class="user-avatar" id="userAvatar" title="Profil">
+                        <span id="userInitial">?</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Pages Container -->
+            <div class="pages-container" id="pagesContainer">
+
+                <!-- Dashboard Page -->
+                <section class="page active" id="page-dashboard">
+                    <div class="dashboard-grid-v2">
+                        <!-- Welcome Card -->
+                        <div class="dashboard-welcome">
+                            <div class="welcome-content">
+                                <h2 id="welcomeText">Merhaba!</h2>
+                                <p id="welcomeSubtext">Bugün harika şeyler başarabilirsin.</p>
+                                <p class="welcome-date" id="welcomeDate"></p>
+                            </div>
+                            <div class="welcome-quote">
+                                <p class="quote-text" id="dailyQuote">"Başarı, her gün tekrarlanan küçük çabaların
+                                    toplamıdır."</p>
+                                <span class="quote-author" id="quoteAuthor">Robert Collier</span>
+                            </div>
+                        </div>
+
+                        <!-- Stats Cards -->
+                        <div class="dashboard-stats">
+                            <div class="dash-stat-card">
+                                <div class="dash-stat-icon lessons">🎓</div>
+                                <div class="dash-stat-info">
+                                    <span class="dash-stat-value" id="totalLessons">0</span>
+                                    <span class="dash-stat-label">Aktif Ders</span>
+                                </div>
+                            </div>
+                            <div class="dash-stat-card">
+                                <div class="dash-stat-icon books">📖</div>
+                                <div class="dash-stat-info">
+                                    <span class="dash-stat-value" id="totalBooks">0</span>
+                                    <span class="dash-stat-label">Okunan Kitap</span>
+                                </div>
+                            </div>
+                            <div class="dash-stat-card">
+                                <div class="dash-stat-icon tasks">✓</div>
+                                <div class="dash-stat-info">
+                                    <span class="dash-stat-value" id="completedTasks">0</span>
+                                    <span class="dash-stat-label">Tamamlanan</span>
+                                </div>
+                            </div>
+                            <div class="dash-stat-card">
+                                <div class="dash-stat-icon games">🎮</div>
+                                <div class="dash-stat-info">
+                                    <span class="dash-stat-value" id="totalGames">0</span>
+                                    <span class="dash-stat-label">Oyun</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Today's Tasks -->
+                        <div class="dashboard-panel tasks-panel">
+                            <div class="panel-header">
+                                <h3>📋 Bugünün Görevleri</h3>
+                                <a href="#" class="panel-link" data-page="planning">Tümünü Gör →</a>
+                            </div>
+                            <div class="panel-content" id="todayTasks">
+                                <p class="empty-state">Bugün için görev yok 🎉</p>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="dashboard-panel quick-panel">
+                            <div class="panel-header">
+                                <h3>⚡ Hızlı Erişim</h3>
+                            </div>
+                            <div class="quick-actions-grid">
+                                <button class="quick-btn" data-action="addLesson">
+                                    <span class="quick-btn-icon">🎓</span>
+                                    <span>Yeni Ders</span>
+                                </button>
+                                <button class="quick-btn" data-action="addBook">
+                                    <span class="quick-btn-icon">📖</span>
+                                    <span>Yeni Kitap</span>
+                                </button>
+                                <button class="quick-btn" data-action="addTask">
+                                    <span class="quick-btn-icon">📋</span>
+                                    <span>Yeni Görev</span>
+                                </button>
+                                <button class="quick-btn" data-action="addGame">
+                                    <span class="quick-btn-icon">🎮</span>
+                                    <span>Yeni Oyun</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Habit Chain (Zinciri Kırma) -->
+                        <div class="dashboard-panel habit-chain-panel">
+                            <div class="panel-header">
+                                <h3>🔥 Zinciri Kırma</h3>
+                                <a href="#" class="panel-link" data-page="habits">Tümünü Gör →</a>
+                            </div>
+                            <div class="panel-content" id="dashboardHabitChain">
+                                <p class="empty-state">Yükleniyor...</p>
+                            </div>
+                        </div>
+
+                        <!-- Upcoming -->
+                        <div class="dashboard-panel upcoming-panel">
+                            <div class="panel-header">
+                                <h3>📆 Yaklaşan</h3>
+                            </div>
+                            <div class="panel-content" id="upcomingItems">
+                                <p class="empty-state">Yaklaşan etkinlik yok</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lessons Page -->
+                <section class="page" id="page-lessons">
+                    <div class="page-header">
+                        <h2>🎓 Dersler</h2>
+                        <button class="btn btn-primary" id="addLessonBtn">
+                            <span>+</span> Yeni Ders
+                        </button>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="lessonStatTotal">0</span>
+                            <span class="stats-card-label">Toplam Ders</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="lessonStatProgress">0</span>
+                            <span class="stats-card-label">Toplam Kredi</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="lessonStatCompleted">0</span>
+                            <span class="stats-card-label">Dosya Sayısı</span>
+                        </div>
+                    </div>
+
+                    <div class="module-grid" id="lessonsGrid">
+                        <div class="empty-state-large">
+                            <span class="empty-icon">🎓</span>
+                            <h3>Henüz ders eklenmedi</h3>
+                            <p>Metalurji ve Malzeme Mühendisliği derslerinizi ekleyin</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Books Page -->
+                <section class="page" id="page-books">
+                    <div class="page-header">
+                        <h2>📖 Kitaplar</h2>
+                        <button class="btn btn-primary" id="addBookBtn">
+                            <span>+</span> Yeni Kitap
+                        </button>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="bookStatTotal">0</span>
+                            <span class="stats-card-label">Toplam Kitap</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="bookStatReading">0</span>
+                            <span class="stats-card-label">Okunuyor</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="bookStatCompleted">0</span>
+                            <span class="stats-card-label">Tamamlanan</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="bookStatPages">0</span>
+                            <span class="stats-card-label">Okunan Sayfa</span>
+                        </div>
+                    </div>
+
+                    <div class="module-grid" id="booksGrid">
+                        <div class="empty-state-large">
+                            <span class="empty-icon">📖</span>
+                            <h3>Henüz kitap eklenmedi</h3>
+                            <p>Okumak istediğiniz kitapları ekleyerek takip edin</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sites Page -->
+                <section class="page" id="page-sites">
+                    <div class="page-header">
+                        <h2>🌐 Siteler</h2>
+                        <button class="btn btn-primary" id="addSiteBtn">
+                            <span>+</span> Yeni Site
+                        </button>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="siteStatTotal">0</span>
+                            <span class="stats-card-label">Toplam Site</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="siteStatFavorite">0</span>
+                            <span class="stats-card-label">Favoriler</span>
+                        </div>
+                    </div>
+
+                    <div class="module-grid" id="sitesGrid">
+                        <div class="empty-state-large">
+                            <span class="empty-icon">🌐</span>
+                            <h3>Henüz site eklenmedi</h3>
+                            <p>Faydalı siteleri kaydedin ve organize edin</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Exams Page -->
+                <section class="page" id="page-exams">
+                    <div class="page-header">
+                        <h2>📝 Sınavlar</h2>
+                        <button class="btn btn-primary" id="addExamBtn">
+                            <span>+</span> Yeni Sınav
+                        </button>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="examStatTotal">0</span>
+                            <span class="stats-card-label">Toplam Sınav</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="examStatUpcoming">0</span>
+                            <span class="stats-card-label">Yaklaşan</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="examStatThisWeek">0</span>
+                            <span class="stats-card-label">Bu Hafta</span>
+                        </div>
+                    </div>
+
+                    <div class="module-grid" id="examsGrid">
+                        <div class="empty-state-large">
+                            <span class="empty-icon">📝</span>
+                            <h3>Henüz sınav eklenmedi</h3>
+                            <p>Sınavlarınızı ekleyerek geri sayımı başlatın</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Shows Page -->
+                <section class="page" id="page-shows">
+                    <div class="page-header">
+                        <h2>🎬 Dizi / Film</h2>
+                        <button class="btn btn-primary" id="addShowBtn">
+                            <span>+</span> Yeni Ekle
+                        </button>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="showStatTotal">0</span>
+                            <span class="stats-card-label">Toplam</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="showStatWatching">0</span>
+                            <span class="stats-card-label">İzleniyor</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="showStatCompleted">0</span>
+                            <span class="stats-card-label">Tamamlandı</span>
+                        </div>
+                    </div>
+
+                    <div class="module-grid" id="showsGrid">
+                        <div class="empty-state-large">
+                            <span class="empty-icon">🎬</span>
+                            <h3>Henüz dizi veya film eklenmedi</h3>
+                            <p>İzlediğiniz yapımları takip edin</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Games Page -->
+                <section class="page" id="page-games">
+                    <div class="page-header">
+                        <h2>🎮 Oyunlar</h2>
+                        <button class="btn btn-primary" id="addGameBtn">
+                            <span>+</span> Yeni Oyun
+                        </button>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="gameStatTotal">0</span>
+                            <span class="stats-card-label">Toplam Oyun</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="gameStatPlaying">0</span>
+                            <span class="stats-card-label">Oynanıyor</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="gameStatCompleted">0</span>
+                            <span class="stats-card-label">Tamamlanan</span>
+                        </div>
+                    </div>
+
+                    <div class="module-grid" id="gamesGrid">
+                        <div class="empty-state-large">
+                            <span class="empty-icon">🎮</span>
+                            <h3>Henüz oyun eklenmedi</h3>
+                            <p>Oynadığınız veya oynamak istediğiniz oyunları ekleyin</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- YouTube Page -->
+                <section class="page" id="page-youtube">
+                    <div class="page-header">
+                        <h2>▶️ YouTube</h2>
+                        <button class="btn btn-primary" id="addYoutubeBtn">
+                            <span>+</span> Yeni Kanal
+                        </button>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="ytStatTotal">0</span>
+                            <span class="stats-card-label">Toplam Kanal</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="ytStatFavorite">0</span>
+                            <span class="stats-card-label">Favoriler</span>
+                        </div>
+                    </div>
+
+                    <div class="module-grid" id="youtubeGrid">
+                        <div class="empty-state-large">
+                            <span class="empty-icon">▶️</span>
+                            <h3>Henüz kanal eklenmedi</h3>
+                            <p>Takip ettiğiniz YouTube kanallarını organize edin</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Planning Page -->
+                <section class="page" id="page-planning">
+                    <div class="page-header">
+                        <h2>📅 Planlama</h2>
+                        <button class="btn btn-primary" id="addTaskBtn">
+                            <span>+</span> Yeni Görev
+                        </button>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="stats-row">
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="planningStatTotal">0</span>
+                            <span class="stats-card-label">Toplam Görev</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="planningStatTodo">0</span>
+                            <span class="stats-card-label">Yapılacak</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="planningStatInProgress">0</span>
+                            <span class="stats-card-label">Devam Eden</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-card-value" id="planningStatDone">0</span>
+                            <span class="stats-card-label">Tamamlanan</span>
+                        </div>
+                    </div>
+
+                    <!-- View Selector -->
+                    <div class="view-selector">
+                        <button class="view-btn active" data-view="weekly">📆 Haftalık</button>
+                        <button class="view-btn" data-view="monthly">📅 Aylık</button>
+                        <button class="view-btn" data-view="all">📋 Tümü</button>
+                    </div>
+
+                    <!-- Weekly View (Kanban) -->
+                    <div class="planning-view" id="weeklyView">
+                        <div class="kanban-header">
+                            <button class="kanban-nav" id="prevWeek">←</button>
+                            <span class="kanban-title" id="calendarTitle">Bu Hafta</span>
+                            <button class="kanban-nav" id="nextWeek">→</button>
+                        </div>
+
+                        <div class="kanban-board">
+                            <div class="kanban-column">
+                                <div class="kanban-column-header">
+                                    <span class="kanban-column-title">📋 Yapılacak</span>
+                                    <span class="kanban-column-count" id="todoCount">0</span>
+                                </div>
+                                <div class="kanban-list" id="todoList"></div>
+                            </div>
+                            <div class="kanban-column">
+                                <div class="kanban-column-header">
+                                    <span class="kanban-column-title">🔄 Devam Eden</span>
+                                    <span class="kanban-column-count" id="inProgressCount">0</span>
+                                </div>
+                                <div class="kanban-list" id="inProgressList"></div>
+                            </div>
+                            <div class="kanban-column">
+                                <div class="kanban-column-header">
+                                    <span class="kanban-column-title">✅ Tamamlanan</span>
+                                    <span class="kanban-column-count" id="doneCount">0</span>
+                                </div>
+                                <div class="kanban-list" id="doneList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monthly View (Calendar) -->
+                    <div class="planning-view" id="monthlyView" style="display: none;">
+                        <div class="kanban-header">
+                            <button class="kanban-nav" id="prevMonth">←</button>
+                            <span class="kanban-title" id="monthTitle">Şubat 2026</span>
+                            <button class="kanban-nav" id="nextMonth">→</button>
+                        </div>
+                        <div class="monthly-calendar" id="monthlyCalendar">
+                            <!-- Calendar will be rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- All Tasks View (List) -->
+                    <div class="planning-view" id="allTasksView" style="display: none;">
+                        <div class="tasks-filter">
+                            <select class="form-select" id="taskStatusFilter" style="width: auto;">
+                                <option value="all">Tüm Durumlar</option>
+                                <option value="todo">Yapılacak</option>
+                                <option value="inProgress">Devam Eden</option>
+                                <option value="done">Tamamlanan</option>
+                            </select>
+                            <select class="form-select" id="taskPriorityFilter" style="width: auto;">
+                                <option value="all">Tüm Öncelikler</option>
+                                <option value="high">🔴 Yüksek</option>
+                                <option value="medium">🟡 Orta</option>
+                                <option value="low">🟢 Düşük</option>
+                            </select>
+                        </div>
+                        <div class="all-tasks-list" id="allTasksList">
+                            <!-- Tasks will be rendered by JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Habits (Zinciri Kırma) Page -->
+                <section class="page" id="page-habits">
+                    <div class="page-header">
+                        <h2>🔥 Zinciri Kırma</h2>
+                    </div>
+
+                    <div class="profile-container">
+                        <div id="habitTracker">
+                            <!-- Habit tracker içeriği JavaScript ile yüklenecek -->
+                        </div>
+
+                        <div class="card" style="margin-top: 24px; padding: 24px;">
+                            <h3 style="margin-bottom: 16px;">💡 Nasıl Çalışır?</h3>
+                            <ul style="color: var(--text-secondary); line-height: 1.8;">
+                                <li>Her gün tamamladığınızda takvimden o günü işaretleyin</li>
+                                <li>Arka arkaya günler serinizi oluşturur (streak)</li>
+                                <li>Zinciri kırmamaya çalışın - bu sizin motivasyonunuz!</li>
+                                <li>Yeşil kutular = Tamamlanan günler</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Schedule (Ders Programı) Page -->
+                <section class="page" id="page-schedule">
+                    <div class="page-header">
+                        <h2>📆 Ders Programı</h2>
+                    </div>
+
+                    <div class="card" style="padding: 24px; margin-bottom: 24px;">
+                        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                            Haftalık ders programınızı oluşturun. Hücrelere tıklayarak ders ekleyebilirsiniz.
+                        </p>
+                        <div id="scheduleGrid">
+                            <!-- Schedule grid buraya JS ile yüklenecek -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Page -->
+
+                <section class="page" id="page-profile">
+                    <div class="page-header">
+                        <h2>👤 Profil</h2>
+                    </div>
+
+                    <div class="profile-container">
+                        <div class="profile-card">
+                            <div class="profile-avatar-large" id="profileAvatarLarge">
+                                <span id="profileInitialLarge">?</span>
+                            </div>
+                            <h3 class="profile-name" id="profileName">Kullanıcı</h3>
+                            <p class="profile-subtitle">Metalurji ve Malzeme Mühendisliği Öğrencisi</p>
+                        </div>
+
+                        <div class="profile-section">
+                            <h4>Kişisel Bilgiler</h4>
+                            <div class="profile-form">
+                                <div class="form-group">
+                                    <label class="form-label">İsim</label>
+                                    <input type="text" class="form-input" id="profileNameInput" placeholder="Adınız">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Üniversite</label>
+                                    <input type="text" class="form-input" id="profileUniversity"
+                                        placeholder="Üniversiteniz">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Bölüm</label>
+                                    <input type="text" class="form-input" id="profileDepartment"
+                                        value="Metalurji ve Malzeme Mühendisliği">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Sınıf</label>
+                                    <select class="form-select" id="profileYear">
+                                        <option value="1">1. Sınıf</option>
+                                        <option value="2">2. Sınıf</option>
+                                        <option value="3">3. Sınıf</option>
+                                        <option value="4">4. Sınıf</option>
+                                        <option value="master">Yüksek Lisans</option>
+                                        <option value="phd">Doktora</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" id="saveProfileBtn" style="margin-top: 16px;">
+                                    💾 Kaydet
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="profile-section">
+                            <h4>Görünüm Ayarları</h4>
+                            <div class="profile-option">
+                                <span>Tema</span>
+                                <div class="theme-options">
+                                    <button class="theme-option" data-theme="dark">🌙 Koyu</button>
+                                    <button class="theme-option" data-theme="light">☀️ Açık</button>
+                                </div>
+                            </div>
+                            <div id="emojiPickerContainer">
+                                <!-- Emoji picker ve avatar renkleri buraya JavaScript ile yüklenecek -->
+                            </div>
+                        </div>
+
+                        <div class="profile-section">
+                            <h4>Güvenlik</h4>
+                            <div id="securitySettingsContainer">
+                                <!-- Password change form -->
+                            </div>
+                        </div>
+
+                        <div class="profile-section">
+                            <h4>Veri Yönetimi</h4>
+                            <div class="profile-actions">
+                                <button class="btn btn-secondary" id="exportDataBtn">
+                                    📤 Veriyi Dışa Aktar
+                                </button>
+                                <button class="btn btn-secondary" id="importDataBtn">
+                                    📥 Veriyi İçe Aktar
+                                </button>
+                                <button class="btn btn-danger" id="clearDataBtn">
+                                    🗑️ Tüm Verileri Sil
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="profile-section">
+                            <h4>Oturum</h4>
+                            <div class="profile-actions">
+                                <button class="btn btn-danger" id="logoutBtn" style="width: 100%;">
+                                    🚪 Çıkış Yap
+                                </button>
+                            </div>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                                Çıkış yaptığınızda verileriniz silinmez, sadece oturum kapatılır.
+                            </p>
+                        </div>
+
+                        <div class="profile-section">
+                            <h4>İstatistikler</h4>
+                            <div class="profile-stats">
+                                <div class="profile-stat">
+                                    <span class="profile-stat-value" id="profileStatLessons">0</span>
+                                    <span class="profile-stat-label">Ders</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-value" id="profileStatBooks">0</span>
+                                    <span class="profile-stat-label">Kitap</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-value" id="profileStatTasks">0</span>
+                                    <span class="profile-stat-label">Görev</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-value" id="profileStatGames">0</span>
+                                    <span class="profile-stat-label">Oyun</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pomodoro Page -->
+                <section class="page" id="page-pomodoro">
+                    <div class="pomodoro-container">
+                        <!-- Timer Card -->
+                        <div class="pomodoro-timer-card">
+                            <div class="pomodoro-timer work" id="pomodoroTimer">25:00</div>
+                            <div class="pomodoro-status" id="pomodoroStatus">Çalışma Zamanı</div>
+                            <div class="pomodoro-controls">
+                                <button class="pomodoro-btn primary" id="pomodoroStart">▶ Başlat</button>
+                                <button class="pomodoro-btn secondary" id="pomodoroPause" style="display: none;">⏸
+                                    Duraklat</button>
+                                <button class="pomodoro-btn secondary" id="pomodoroReset">↺ Sıfırla</button>
+                            </div>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="pomodoro-stats">
+                            <div class="pomodoro-stat-card">
+                                <div class="pomodoro-stat-value" id="pomodoroCompleted">0</div>
+                                <div class="pomodoro-stat-label">Tamamlanan</div>
+                            </div>
+                            <div class="pomodoro-stat-card">
+                                <div class="pomodoro-stat-value" id="pomodoroTotalMinutes">0</div>
+                                <div class="pomodoro-stat-label">Toplam Dakika</div>
+                            </div>
+                            <div class="pomodoro-stat-card">
+                                <div class="pomodoro-stat-value" id="pomodoroStreak">0</div>
+                                <div class="pomodoro-stat-label">Günlük Seri</div>
+                            </div>
+                        </div>
+
+                        <!-- Settings -->
+                        <div class="pomodoro-settings">
+                            <h3>⚙️ Ayarlar</h3>
+                            <div class="pomodoro-setting-row">
+                                <label>Çalışma Süresi (dk)</label>
+                                <input type="number" class="form-input" id="pomodoroWorkTime" value="25" min="1"
+                                    max="60">
+                            </div>
+                            <div class="pomodoro-setting-row">
+                                <label>Kısa Mola (dk)</label>
+                                <input type="number" class="form-input" id="pomodoroShortBreak" value="5" min="1"
+                                    max="30">
+                            </div>
+                            <div class="pomodoro-setting-row">
+                                <label>Uzun Mola (dk)</label>
+                                <input type="number" class="form-input" id="pomodoroLongBreak" value="15" min="1"
+                                    max="60">
+                            </div>
+                            <div class="pomodoro-setting-row"
+                                style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                                <button class="btn btn-secondary" onclick="Pomodoro.resetAllData()"
+                                    style="width: 100%; color: var(--danger);">
+                                    🗑️ Verileri Sıfırla
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notes Page -->
+                <section class="page" id="page-notes">
+                    <div id="notesContainer">
+                        <!-- Dynamic content by Notes.render() -->
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Notifications Panel -->
+        <div class="notifications-panel" id="notificationsPanel">
+            <div class="notifications-header">
+                <h3>Bildirimler</h3>
+                <button class="panel-close" id="closeNotifications">×</button>
+            </div>
+            <div class="notifications-list" id="notificationsList">
+                <p class="empty-state">Bildirim yok</p>
+            </div>
+        </div>
+
+        <!-- Modal Container -->
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal" id="modal">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Modal</h3>
+                    <button class="modal-close" id="closeModal">×</button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-overlay" style="display: none;">
+        <!-- Dynamic Login Content -->
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/lessons.js"></script>
+    <script src="js/books.js"></script>
+    <script src="js/sites.js"></script>
+    <script src="js/games.js"></script>
+    <script src="js/shows.js"></script>
+    <script src="js/youtube.js"></script>
+    <script src="js/planning.js"></script>
+    <script src="js/habits.js"></script>
+    <script src="js/exams.js"></script>
+    <script src="js/schedule.js"></script>
+    <script src="js/pomodoro.js"></script>
+    <script src="js/notes.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/drive-sync.js"></script> <!-- Optional Sync -->
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
