@@ -1,55 +1,119 @@
-LifeOS Portable - Kurulum ve Kullanım Rehberi
-Tebrikler! LifeOS artık taşınabilir (mobil uyumlu) ve verilerinizi senkronize edebilir hale geldi.
+# 🚀 LifeOS Portable
+Kurulum · Senkronizasyon · Mobil & PWA Rehberi
 
-1. PWA - Telefonunuza Yükleme (Uygulama Gibi)
-LifeOS artık bir web sitesi değil, bir uygulamadır.
+LifeOS artık taşınabilir, mobil uyumlu ve veri senkronizasyonu destekli bir kişisel yaşam işletim sistemidir.
+Web sitesi gibi değil, gerçek bir uygulama gibi çalışır.
 
-iPhone (iOS):
-Safari'de siteyi açın.
-"Paylaş" butonuna basın.
-"Ana Ekrana Ekle" seçeneğine dokunun.
-Android:
-Chrome'da siteyi açın.
-Sağ üstteki menüden "Uygulamayı Yükle" veya "Ana Ekrana Ekle" deyin.
-2. Veri Taşıma & Yedekleme (Hibrit Sistem)
-Yöntem A: Manuel Yedekleme (Hızlı & Kolay)
-Hiçbir kurulum gerektirmez. Dosya göndererek çalışır.
+Canlı Demo:
+https://kaanzio.github.io/lifeos
 
-Profil sayfasına gidin.
-⬇️ Yedeği İndir butonuna basın.
-İnen 
-.json
- dosyasını telefonunuza gönderin (WhatsApp, Telegram, Email vb.).
-Telefonda LifeOS'u açın, Profil sayfasına gidin.
-⬆️ Yedeği Yükle diyerek dosyayı seçin.
-Yöntem B: Google Drive Senkronizasyon (Otomatik)
-Eğer "dosya taşıma" ile uğraşmak istemiyorsanız:
+---
 
-Google Cloud Kurulum Rehberi
- adımlarını takip ederek Client ID alın.
-LifeOS Profil sayfasında "Google Drive Senkronizasyon" bölümüne bu kodu yapıştırıp Kaydet deyin.
-Artık "Drive'a Gönder" ve "Drive'dan Al" butonları ile tek tıkla eşitleme yapabilirsiniz.
-🔒 Gizlilik ve Güvenlik (Önemli)
-Site Erişimi: kaanzio.github.io/lifeos adresi herkese açıktır. Linki bilen herkes siteye girebilir.
-Veri Gizliliği: Siteye girenler SİZİN VERİLERİNİZİ GÖREMEZ.
-Tüm notlarınız, görevleriniz ve ayarlarınız sadece sizin kullandığınız cihazın tarayıcısında (Local Storage) saklanır.
-Başka biri siteye girdiğinde, kendi boş LifeOS uygulamasını görür. Sizin yazdıklarınızı göremez.
-Yedek Dosyası: İndirdiğiniz 
-.json
- yedek dosyasını kimseyle paylaşmadığınız sürece verileriniz tamamen güvendedir.
-3. Yenilikler (Sürüm 9.0)
-Bütünleşik Profil: Profil sayfası artık tek bir büyük, yuvarlatılmış dikdörtgen blok ("Canvas") içinde toparlandı. İçerik bu bloğun kenarlarına hizalandı.
-Simetrik Yapı: 2 Sütunlu düzen bu ana blok içinde korunarak daha derli toplu bir görünüm sağlandı.
-Modern Kontrast: İç kartlar, ana blok üzerinde daha belirgin duracak şekilde renklendirildi.
-4. Mobil & PWA (Sürüm 10.0)
+## 📱 PWA – Telefona Uygulama Gibi Kurulum
+
+LifeOS, Progressive Web App (PWA) olarak çalışır.
+
+### iPhone (iOS)
+1. Safari’de siteyi açın
+2. Paylaş butonuna dokunun
+3. Ana Ekrana Ekle seçeneğini seçin
+
+### Android
+1. Chrome’da siteyi açın
+2. Sağ üst menüden:
+   - Uygulamayı Yükle
+   - veya Ana Ekrana Ekle
+
+Kurulumdan sonra LifeOS, normal bir mobil uygulama gibi çalışır.
+
+---
+
+## 🔄 Veri Taşıma & Yedekleme (Hibrit Sistem)
+
+LifeOS verileri sunucuya değil, cihazınızın tarayıcısına kaydeder.
+Senkronizasyon tamamen sizin kontrolünüzdedir.
+
+---
+
+### 🔹 Yöntem A: Manuel Yedekleme (Hızlı & Basit)
+
+Kurulum gerektirmez.
+
+1. Profil sayfasına gidin
+2. ⬇️ Yedeği İndir butonuna basın
+3. Oluşan `.json` dosyasını başka cihaza gönderin
+   - WhatsApp
+   - Telegram
+   - Email
+4. Yeni cihazda LifeOS’u açın
+5. Profil → ⬆️ Yedeği Yükle
+6. Dosyayı seçin
+
+Tüm verileriniz birebir geri yüklenir.
+
+---
+
+### 🔹 Yöntem B: Google Drive Senkronizasyonu (Otomatik)
+
+Dosya taşıma ile uğraşmak istemeyenler için.
+
+1. Google Cloud üzerinden bir Client ID oluşturun
+2. LifeOS → Profil sayfasına gidin
+3. Google Drive Senkronizasyon alanına Client ID’yi yapıştırın
+4. Kaydet deyin
+
+Artık:
+- 📤 Drive’a Gönder
+- 📥 Drive’dan Al
+
+butonları ile tek tık senkronizasyon yapabilirsiniz.
+
+---
+
+## 🔐 Gizlilik & Güvenlik
+
+- Site adresi herkese açıktır
+- Başkaları sizin verilerinizi göremez
+- Tüm veriler:
+  - Notlar
+  - Görevler
+  - Ayarlar
+
+yalnızca sizin tarayıcınızda (Local Storage) saklanır.
+
+Başka biri siteye girdiğinde:
+- Kendi boş LifeOS uygulamasını görür
+- Sizin verilerinize erişemez
+
+`.json` yedek dosyasını kimseyle paylaşmadığınız sürece verileriniz güvendedir.
+
+---
+
+## ✨ Yenilikler
+
+### 📦 Sürüm 9.0
+- Profil sayfası tek, büyük, yuvarlatılmış bir ana blok (Canvas) içinde toplandı
+- 2 sütunlu simetrik yapı korundu
+- İç kartlar daha belirgin kontrast ile sunuldu
+
+---
+
+### 📲 Sürüm 10.0 – Mobil & PWA
+
 Round 13: PWA & GitHub Ready (Active)
-PWA Desteği: 
-manifest.json
- ve 
-service-worker.js
- yapılandırıldı. Uygulama artık mobil cihazlara (iOS/Android) yüklenebilir.
-Çevrimdışı Çalışma: Temel dosyalar önbelleğe alınarak internet yokken de çalışması sağlandı.
-Hazır Dosyalar: Tüm proje dosyaları son haliyle GitHub'a manuel yüklenmeye hazırdır.
-Mobil Uygulama (PWA): Artık "Ana Ekrana Ekle" diyerek telefona uygulama gibi kurulabilir.
-Çevrimdışı Mod: İnternet olmasa bile uygulama açılır ve önbellekteki verilerle çalışır.
-İkonlar: Yeni uygulama ikonları eklendi.
+
+- PWA desteği (manifest.json, service-worker.js)
+- Çevrimdışı çalışma desteği
+- Ana ekrana eklenebilir mobil uygulama
+- Yeni uygulama ikonları
+- GitHub’a yüklemeye hazır final dosyalar
+
+---
+
+## 🧠 Özet
+
+- LifeOS kişisel, offline-first bir yaşam sistemidir
+- Sunucu yok
+- Hesap yok
+- Takip yok
+- Kontrol tamamen sizdedir
