@@ -222,14 +222,13 @@ const Pomodoro = {
         document.getElementById('pomodoroStart').style.display = 'none';
         document.getElementById('pomodoroPause').style.display = 'inline-flex';
 
+        // Ensure immediate update FIRST so MediaSession metadata is set before audio plays
+        this.updateDisplay();
         this.manageSilentAudio(true);
 
         this.timerInterval = setInterval(() => {
             this.tick();
         }, 1000);
-
-        // Ensure immediate update
-        this.updateDisplay();
     },
 
     pause() {
@@ -249,9 +248,13 @@ const Pomodoro = {
 
     manageSilentAudio(play) {
         if (!this.silentAudio) {
-            // Tiny silent MP3 base64 for better cross-browser mobile MediaSession support
-            this.silentAudio = new Audio('data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV6urq6urq6urq6urq6urq6urq6urq6urq6v////////////////////////////////8AAAAATGF2YzU4LjkxAAAAAAAAAAAAAAAAJAAAAAAAAAAAASAErE8AAAAAAAAAAAAAAAAAAAAA//OUxAAAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//OUxBUAAgAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//OUxDUAAgAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//OUxFkAAgAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+            this.silentAudio = document.createElement('audio');
+            this.silentAudio.src = 'assets/audio/silence.wav';
+            this.silentAudio.preload = 'auto';
             this.silentAudio.loop = true;
+            this.silentAudio.setAttribute('playsinline', '');
+            this.silentAudio.style.display = 'none';
+            document.body.appendChild(this.silentAudio);
 
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.setActionHandler('play', () => { this.start(); });
