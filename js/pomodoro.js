@@ -264,18 +264,23 @@ const Pomodoro = {
         } else {
             try { this.silentAudio.pause(); } catch (e) { }
         }
+
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.playbackState = play ? 'playing' : 'paused';
+        }
     },
 
     updateMediaSession(timeString, prefix, statusName) {
         if ('mediaSession' in navigator) {
             if (timeString && this.isRunning) {
+                const baseUrl = window.location.href.split('index.html')[0].replace(/\/$/, '') + '/';
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: `${prefix} ${timeString} - ${statusName}`,
                     artist: 'LifeOS Pomodoro',
                     album: 'LifeOS',
                     artwork: [
-                        { src: 'assets/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-                        { src: 'assets/icons/icon-512.png', sizes: '512x512', type: 'image/png' }
+                        { src: baseUrl + 'assets/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+                        { src: baseUrl + 'assets/icons/icon-512.png', sizes: '512x512', type: 'image/png' }
                     ]
                 });
             } else {
