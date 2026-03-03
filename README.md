@@ -3,8 +3,6 @@
 
 LifeOS, hayatınızın farklı alanlarını (eğitim, görevler, kişisel gelişim ve eğlence) tek bir yerden yönetmenize olanak tanıyan, modern, temiz ve kullanımı kolay bir PWA (Progressive Web App - İleri Düzey Web Uygulaması) kişisel kontrol merkezidir.
 
-![LifeOS Ekran Görüntüsü](assets/screenshot.png) <!-- Buraya arayüzünden bir ekran görüntüsü yükledikten sonra bu yolu güncelleyebilirsin -->
-
 🔗 [Canlı Demoya Git](https://kaanzio.github.io/lifeos_mobile/) <!-- GitHub Pages url adresi varsa buraya gelecek -->
 
 ## 🌟 Özellikler
@@ -58,15 +56,6 @@ LifeOS'u herhangi bir kurulum gerektirmeden direkt kullanabilirsiniz.
 1. Projeyi tarayıcınızda açın.
 2. Mobil cihazınızda kullanıyorsanız tarayıcı ayarlarına (sağ üstteki 3 nokta menüsü) tıklayıp **"Ana Ekrana Ekle" (Add to Home Screen)** veya **"Uygulamayı Yükle"** seçeneğini kullanarak telefonunuza bir mobil uygulama gibi anında kurabilirsiniz.
 
-### Geliştiriciler İçin
-Projeyi kendi bilgisayarınıza klonlayıp düzenlemek isterseniz:
-
-```bash
-git clone https://github.com/Kaanzio/lifeos_mobile.git
-cd lifeos_mobile
-# Daha sonra klasör içindeki index.html dosyasını çalıştırın veya
-# Live Server vs. gibi bir eklentiyle açın.
-```
 
 ---
 **Geliştiren:** [Kaanzio](https://github.com/Kaanzio) | Hayatınızı organize etmenin en modern yolu. 🌌
