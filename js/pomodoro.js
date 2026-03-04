@@ -329,8 +329,8 @@ const Pomodoro = {
                     artist: statusName,
                     album: 'LifeOS',
                     artwork: [
-                        { src: baseUrl + 'assets/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-                        { src: baseUrl + 'assets/icons/pomo-bg-wide.png', sizes: '1024x512', type: 'image/png' }
+                        { src: baseUrl + 'assets/icons/icon-192.png?v=99', sizes: '192x192', type: 'image/png' },
+                        { src: baseUrl + 'assets/icons/pomo-bg-final.png?v=99', sizes: '1024x1024', type: 'image/png' }
                     ]
                 });
 

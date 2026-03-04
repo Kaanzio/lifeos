@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lifeos-v6.98-mobile-pwa';
+const CACHE_NAME = 'lifeos-v6.99-mobile-pwa';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -28,7 +28,7 @@ const ASSETS_TO_CACHE = [
     './js/youtube.js',
     './js/drive-sync.js',
     './assets/logo.png',
-    './assets/icons/pomo-bg-wide.png'
+    './assets/icons/pomo-bg-final.png'
 ];
 
 // Install Event
